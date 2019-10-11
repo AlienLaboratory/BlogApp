@@ -64,9 +64,10 @@ app.get("/blogs",function(req,res){
 		{
 			res.render("index",{blogs:blogs});
 		}
+		})
 		*/
 		res.render("index",{blogs:blogs});
-	})
+	
 });
 
 app.post("/blogs" , function(req,res)
