@@ -27,7 +27,7 @@ let Blog = mongoose.model("Blog",blogSchema);
 */
 //connect to Atlas - mongoDB cloud 
 const MongoClient = require('mongodb').MongoClient;
-const uri = "mongodb+srv://Oleksandr:<ecu3ador4>@oleksandr-mongo-qa3k0.gcp.mongodb.net/test?retryWrites=true&w=majority";
+const uri = "mongodb+srv://Oleksandr:ecu3ador4@oleksandr-mongo-qa3k0.gcp.mongodb.net/test?retryWrites=true&w=majority";
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology:true });
 client.connect(err => {
 	const collection = client.db("test").collection("devices");
