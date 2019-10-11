@@ -32,6 +32,7 @@ const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology:
 client.connect(err => {
 	const collection = client.db("test").collection("devices");
 	console.log("Connected, collection: "+collection);
+	console.log("testing");
   // perform actions on the collection object
   client.close();
 });
@@ -54,7 +55,7 @@ app.get("/",function(req,res){
 //index route
 app.get("/blogs",function(req,res){
 	//res.render("index");
-	Blog.find({},function(err,blogs){
+	/*Blog.find({},function(err,blogs){
 		if(err)
 		{
 			console.log(err);
@@ -63,12 +64,14 @@ app.get("/blogs",function(req,res){
 		{
 			res.render("index",{blogs:blogs});
 		}
-		
+		*/
+		res.render("index",{blogs:blogs});
 	})
 });
 
 app.post("/blogs" , function(req,res)
 {
+	/*
 	Blog.create(req.body.blog , function(err,newBlog)
 	{
 		if(err)
@@ -80,6 +83,8 @@ app.post("/blogs" , function(req,res)
 			res.redirect("/blogs");
 		}
 	});
+
+	*/
 });
 
 // Create route (New Route)
@@ -91,6 +96,8 @@ app.get("/blogs/new",function(req,res)
 // show route
 
 app.get("/blogs/:id",function(req,res){
+
+	/*
 	Blog.findById(req.params.id,function(err,found)
 	{
 		if(err)
@@ -102,6 +109,8 @@ app.get("/blogs/:id",function(req,res){
 			res.render("show",{blog:found});
 		}
 	})
+
+	*/
 });
 
 app.listen(8880,function () {
