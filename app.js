@@ -2,13 +2,43 @@ let express = require("express");
 let app = express();
 let bParser = require("body-parser");
 let mongoose = require("mongoose");
-
-/*
-mongoose.connect("mongodb://localhost/blogDB",{useUnifiedTopology:true,useNewUrlParser:true});
+let methodOverride = require("method-override");
 app.set("view engine","ejs");
 app.use(express.static("public"));
 app.use(bParser.urlencoded({extended:true}));
+app.use(methodOverride("_method"));
+//testing goes here
+//const username = process.argv[2].split('=')[1];
+//console.log(`Hello, ${username}`);
 
+const connectionString ="mongodb+srv://Oleksandr:ecu3ador4@oleksandr-mongo-qa3k0.gcp.mongodb.net/test?retryWrites=true&w=majority";
+
+mongoose.connect(connectionString,{useUnifiedTopology:true,useNewUrlParser:true});
+
+let blogSchema = mongoose.Schema(
+	{
+		title : String,
+		image : String,
+		body  : String,
+		created : {type:Date,default:Date.now()}
+	}
+		);
+	//Mongoose model config
+	let Blog = mongoose.model("Blog",blogSchema);
+/* works with Atlas mongoDB cloud!
+	Blog.create(
+		{
+			title:"firstBlog",
+			image: "https://images.unsplash.com/photo-1494959764136-6be9eb3c261e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60",
+			body : "Hello from BODY"
+	
+		});
+*/
+
+//testing ends here
+
+/*
+mongoose.connect("mongodb://localhost/blogDB",{useUnifiedTopology:true,useNewUrlParser:true});
 
 //blog Schema title image body created
 
@@ -25,9 +55,10 @@ let Blog = mongoose.model("Blog",blogSchema);
 
 
 */
+/*
 //connect to Atlas - mongoDB cloud 
 const MongoClient = require('mongodb').MongoClient;
-const uri = "mongodb+srv://Oleksandr:ecu3ador4@oleksandr-mongo-qa3k0.gcp.mongodb.net/test?retryWrites=true&w=majority";
+const uri = "mongodb://Oleksandr:ecu3ador4@oleksandr-mongo-qa3k0.gcp.mongodb.net/test?retryWrites=true&w=majority";
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology:true });
 client.connect(err => {
 	const collection = client.db("test").collection("devices");
@@ -36,6 +67,7 @@ client.connect(err => {
   // perform actions on the collection object
   client.close();
 });
+*/
 
 
 
@@ -54,8 +86,8 @@ app.get("/",function(req,res){
 });
 //index route
 app.get("/blogs",function(req,res){
-	//res.render("index");
-	/*Blog.find({},function(err,blogs){
+	
+	Blog.find({},function(err,blogs){
 		if(err)
 		{
 			console.log(err);
@@ -65,14 +97,14 @@ app.get("/blogs",function(req,res){
 			res.render("index",{blogs:blogs});
 		}
 		})
-		*/
-		res.render("index",{blogs:blogs});
 	
 });
 
+//post route
+
 app.post("/blogs" , function(req,res)
 {
-	/*
+	
 	Blog.create(req.body.blog , function(err,newBlog)
 	{
 		if(err)
@@ -84,8 +116,6 @@ app.post("/blogs" , function(req,res)
 			res.redirect("/blogs");
 		}
 	});
-
-	*/
 });
 
 // Create route (New Route)
@@ -96,9 +126,11 @@ app.get("/blogs/new",function(req,res)
 	});
 // show route
 
+
 app.get("/blogs/:id",function(req,res){
 
-	/*
+	//console.log("test: "+req.params.id);
+	
 	Blog.findById(req.params.id,function(err,found)
 	{
 		if(err)
@@ -110,9 +142,41 @@ app.get("/blogs/:id",function(req,res){
 			res.render("show",{blog:found});
 		}
 	})
-
-	*/
 });
+
+//edit route (sort of combination of new and show routes)
+app.get("/blogs/:id/edit",function(req,res)
+{
+	Blog.findById(req.params.id,function(err,foundBlog)
+	{
+		if(err)
+		{
+			console.log(err);
+		}
+		else
+		{
+			res.render("edit",{blog:foundBlog});
+		}
+	});
+	
+});
+
+// update route
+app.put("/blogs/:id",function(req,res)
+{
+	Blog.findByIdAndUpdate(req.params.id, req.body.blog ,function(err,updated)
+	{
+		if(err)
+		{
+			console.log(err);
+		}
+		else
+		{
+			res.redirect("/blogs/" + req.params.id);
+		}
+	})
+});
+
 
 app.listen(8880,function () {
 console.log("Server 8880 is now running");
