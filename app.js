@@ -3,10 +3,12 @@ let app = express();
 let bParser = require("body-parser");
 let mongoose = require("mongoose");
 let methodOverride = require("method-override");
+let expressSanitizer = require("express-sanitizer");
 app.set("view engine","ejs");
 app.use(express.static("public"));
 app.use(bParser.urlencoded({extended:true}));
 app.use(methodOverride("_method"));
+app.use(expressSanitizer());
 //testing goes here
 //const username = process.argv[2].split('=')[1];
 //console.log(`Hello, ${username}`);
@@ -105,6 +107,8 @@ app.get("/blogs",function(req,res){
 app.post("/blogs" , function(req,res)
 {
 	
+	req.body.blog.body = req.sanitize(req.body.blog.body);
+
 	Blog.create(req.body.blog , function(err,newBlog)
 	{
 		if(err)
@@ -164,6 +168,9 @@ app.get("/blogs/:id/edit",function(req,res)
 // update route
 app.put("/blogs/:id",function(req,res)
 {
+
+	req.body.blog.body = req.sanitize(req.body.blog.body);
+
 	Blog.findByIdAndUpdate(req.params.id, req.body.blog ,function(err,updated)
 	{
 		if(err)
@@ -176,8 +183,23 @@ app.put("/blogs/:id",function(req,res)
 		}
 	})
 });
+//delete route
+app.delete("/blogs/:id",function(req,res)
+{
+Blog.findByIdAndRemove(req.params.id,function(err,blog)
+{
+	if(err)
+	{
+		res.redirect("/blogs");
+	}
+	else
+	{
+		res.redirect("/blogs");
+	}
+});
+});
 
 
 app.listen(8880,function () {
-console.log("Server 8880 is now running");
+console.log("Server 8880 is running");
 });
