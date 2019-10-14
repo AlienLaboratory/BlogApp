@@ -88,7 +88,7 @@ app.get("/",function(req,res){
 });
 //index route
 app.get("/blogs",function(req,res){
-	
+	//Article.find({}).sort('-date').exec(function(err, docs) { ... });
 	Blog.find({},function(err,blogs){
 		if(err)
 		{
@@ -98,8 +98,8 @@ app.get("/blogs",function(req,res){
 		{
 			res.render("index",{blogs:blogs});
 		}
-		})
-	
+
+		}).sort({ created: 'desc' });;
 });
 
 //post route
