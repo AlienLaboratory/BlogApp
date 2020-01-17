@@ -4,7 +4,8 @@
   "description": "A blog to practice Restful Routes",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "eslint": "LIST=`git diff-index --name-only --diff-filter=d origin/master | grep -E '.(js|jsx)$';`; eslint --ignore-pattern '!.eslintrc.js' --color $LIST",
+    "eslint-all": "eslint . --ext .js --ext .jsx"
   },
   "author": "Oleksandr",
   "license": "ISC",
@@ -15,5 +16,16 @@
     "express-sanitizer": "^1.0.5",
     "method-override": "^3.0.0",
     "mongoose": "^5.7.3"
+  },
+  "devDependencies": {
+    "babel-eslint": "^10.0.2",
+    "eslint": "^6.1.0",
+    "eslint-config-airbnb": "^18.0.1",
+    "eslint-config-ff": "^1.5.0",
+    "eslint-plugin-babel": "^5.3.0",
+    "eslint-plugin-import": "^2.18.2",
+    "eslint-plugin-jsx-a11y": "^6.2.3",
+    "eslint-plugin-react": "^7.14.3",
+    "eslint-plugin-react-hooks": "^1.7.0"
   }
 }

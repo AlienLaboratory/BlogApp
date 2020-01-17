@@ -1,0 +1,13 @@
+# 
+dependencies
+/node_modules
+/data
+# misc/code editor
+.DS_Store
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+.vscode/launch.json
+.vscode/
+.code-workspace
